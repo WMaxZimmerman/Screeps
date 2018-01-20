@@ -7,7 +7,7 @@ module.exports = function(grunt) {
             options: {
                 email: 'william.m.zimmerman@gmail.com',
                 password: 'M@xz1992',
-                branch: 'master',
+                branch: 'default',
                 ptr: false
             },
             dist: {
