@@ -41,14 +41,29 @@ var roleFighter = {
     },
 
     claim: function(creep) {
+        var flag = Game.flags['Claim'];
+        targetRoom = flag.pos.roomName;
+        console.log(JSON.stringify(targetRoom));
+        if (targetRoom != undefined && targetRoom != null) {
+            if (creep.room.name != targetRoom) {
+                console.log(creep.room.name);
+                var flagPath = creep.pos.findPathTo(flag, {algorithm: 'astar'});
+                creep.moveTo(flag);
+            } else {
+                var controller = creep.room.controller;
+                var claimCode = creep.claimController(controller);
+                if (claimCode == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(controller);
+                } else if (claimCode != 0) {
+                    creep.say(claimCode);
+                }
+            }
+        }
 
-        var controller = creep.room.controller;
-        //creep.say(creep.claimController(controller));
-        creep.say(creep.reserveController(controller));
     },
 
     invade: function(creep) {
-        var flag = Game.flags['invade'];
+        var flag = Game.flags['EnemySpawn'];
         targetRoom = flag.pos.roomName;
         console.log(JSON.stringify(targetRoom));
         if (targetRoom == undefined || targetRoom == null) {
@@ -57,19 +72,22 @@ var roleFighter = {
             console.log('0');
             if (creep.room.name != targetRoom) {
                 console.log(creep.room.name);
-                var flagPath = creep.pos.findPathTo(flag, {algorithm: 'astar', ignoreDestructibleStructures: true});
+                var flagPath = creep.pos.findPathTo(flag, {algorithm: 'astar'});
                 creep.moveTo(flag);
             } else {
-                var closestSpawn = creep.pos.findClosestByPath(FIND_HOSTILE_SPAWNS, {algorithm: 'astar', ignoreDestructibleStructures: true});
+                //var flagPath = creep.pos.findPathTo(flag, {algorithm: 'astar'});
+                //creep.moveTo(flag);
+                //return;
+                var closestSpawn = creep.pos.findClosestByPath(FIND_HOSTILE_SPAWNS, {algorithm: 'astar'});
 
                 if (closestSpawn != null) {
                     console.log('2');
                     if (creep.dismantle(closestSpawn) == ERR_NOT_IN_RANGE) {
-                        creep.rangedAttack(closestSpawn);
-                        var closestWall = creep.pos.findClosestByPath(FIND_STRUCTURES, {filter: (struct) => struct.structureType == STRUCTURE_WALL});
-                        var attackCode = creep.dismantle(closestWall);
-                        console.log('dismantle code: ' + attackCode);
-                        var path = creep.pos.findPathTo(closestSpawn, {algorithm: 'astar', ignoreDestructibleStructures: true});
+                        //creep.rangedAttack(closestSpawn);
+                        //var closestWall = creep.pos.findClosestByPath(FIND_STRUCTURES, {filter: (struct) => struct.structureType == STRUCTURE_WALL});
+                        //var attackCode = creep.dismantle(closestWall);
+                        //console.log('dismantle code: ' + attackCode);
+                        var path = creep.pos.findPathTo(closestSpawn, {algorithm: 'astar'});
                         creep.moveByPath(path);
                     }
                 } else {

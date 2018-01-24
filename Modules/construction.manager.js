@@ -62,6 +62,31 @@ var constructionManager = {
         }
     },
 
+    getPrioritySite: function(roomName) {
+        var prioritizedSites = Memory.sites.sort(function(a,b) {
+            if (a.priorityCount > b.priorityCount) {
+                return -1;
+            } else {
+                return 1;
+            }
+        }).filter(s => s.roomName == roomName);
+
+        if (prioritizedSites.length == 0) return null;
+
+        var topSite = prioritizedSites[0].pos;
+        var roomName = prioritizedSites[0].roomName;
+        //console.log('top: ' + JSON.stringify(topSite));
+        var topTargets = Game.rooms[roomName].lookForAt(LOOK_CONSTRUCTION_SITES, topSite.x,  topSite.y);
+        //console.log('sites: ' + topTargets.length);
+        //console.log('topSite: ' + JSON.stringify(topTargets[0]));
+
+        if (topTargets.length > 0) {
+            return topTargets[0];
+        } else {
+            return null;
+        }
+    },
+
     cleanUselessRoads: function() {
         for(var index in Memory.sites) {
             var site = Memory.sites[index];
@@ -74,6 +99,30 @@ var constructionManager = {
                     Memory.sites.splice(index, 1);
                     console.log('Removed unused road site.');
                 }
+            }
+        }
+    },
+
+    moveTowardTarget: function(creep, target, actionName) {
+        //creep.say('move');
+        var actionCode;
+        if (actionName == 'upgrade') {
+            actionCode = creep.upgradeController(target);
+        } else if (actionName == 'harvest') {
+            actionCode = creep.harvest(target);
+        } else if (actionName == 'build') {
+            actionCode = creep.build(target);
+        } else if (actionName == 'transfer') {
+            actionCode = creep.transfer(target, RESOURCE_ENERGY);
+        }
+
+        //creep.say(actionCode);
+        console.log(actionName + ': ' + actionCode);
+        //console.log(JSON.stringify(target));
+        if(target != null && actionCode == ERR_NOT_IN_RANGE) {
+            let moveCode = creep.moveTo(target, {visualizePathStyle: {stroke: '#ffaa00'}, ignoreRoads: true, swampCost: 1, plainCost: 1});
+            if (moveCode == ERR_NO_PATH) {
+                creep.moveTo(target, {visualizePathStyle: {stroke: '#ffaa00'}, ignoreCreeps: true, ignoreRoads: true, swampCost: 1, plainCost: 1});
             }
         }
     }

@@ -16,10 +16,8 @@ var roleUpgrader = {
         }
 
         if(creep.memory.upgrading) {
-            var controller = Game.spawns['Spawn1'].room.controller;
-            if(creep.upgradeController(controller) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(controller, {visualizePathStyle: {stroke: '#ffffff'}});
-            }
+            var controller = creep.room.controller;
+            constructionManager.moveTowardTarget(creep, controller, 'upgrade');
         }
         else {
             // if (creep.memory.role == 'upgrader' && creep.room.name == Game.spawns['Spawn1'].room.name) {
@@ -28,9 +26,7 @@ var roleUpgrader = {
             //     creep.moveTo(exit, {visualizePathStyle: {stroke: '#ffaa00'}});
             //} else {
                 var source = creep.pos.findClosestByPath(FIND_SOURCES, { algorithm: 'astar', ignoreRoads: true, swampCost: 1, plainCost: 1 });
-                if(source != null && creep.harvest(source) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(source, {visualizePathStyle: {stroke: '#ffaa00'}});
-                }
+                constructionManager.moveTowardTarget(creep, source, 'harvest');
             //}
         }
 

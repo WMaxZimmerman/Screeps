@@ -8,10 +8,12 @@ var roleHarvester = {
         if (creep.memory.isHarvesting == undefined) creep.memory.isHarvesting = creep.carry.energy < creep.carryCapacity;
 
         if(creep.carry.energy < creep.carryCapacity && creep.memory.isHarvesting == true) {
-            var source = creep.pos.findClosestByPath(FIND_SOURCES, { algorithm: 'astar', ignoreRoads: true, swampCost: 1, plainCost: 1 });
-            if(source != null && creep.harvest(source) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(source, {visualizePathStyle: {stroke: '#ffaa00'}});
+            var source = creep.pos.findClosestByPath(FIND_SOURCES, { algorithm: 'astar', ignoreRoads: true,  swampCost: 1, plainCost: 1 });
+            if (source == null) {
+                creep.pos.findClosestByPath(FIND_SOURCES, { algorithm: 'astar', ignoreCreeps: true, ignoreRoads: true,  swampCost: 1, plainCost: 1 });
+                console.log(JSON.stringify(source));
             }
+            constructionManager.moveTowardTarget(creep, source, 'harvest');
         }
         else {
             if (creep.carry.energy == creep.carryCapacity) creep.memory.isHarvesting = false;
@@ -23,7 +25,7 @@ var roleHarvester = {
                         structure.structureType == STRUCTURE_TOWER||
                         structure.structureType == STRUCTURE_CONTAINER) &&
                         (structure.energy < structure.energyCapacity);
-                }, algorithm: 'astar', ignoreRoads: true, swampCost: 1, plainCost: 1
+                }, algorithm: 'astar', ignoreRoads: true, ignoreCreeps: true, swampCost: 1, plainCost: 1
             });
 
             if (target == null) {
@@ -31,13 +33,12 @@ var roleHarvester = {
                     filter: (structure) => {
                         return (structure.structureType == STRUCTURE_CONTAINER) &&
                             (structure.store[RESOURCE_ENERGY] < structure.storeCapacity);
-                    }, algorithm: 'astar', ignoreRoads: true, swampCost: 1, plainCost: 1
+                    }, algorithm: 'astar', ignoreRoads: true, ignoreCreeps: true, swampCost: 1, plainCost: 1
                 });
             }
 
-            if(target != null && creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(target, {visualizePathStyle: {stroke: '#ffffff'}});
-            }
+            constructionManager.moveTowardTarget(creep, target, 'transfer');
+
             if (creep.carry.energy == 0) creep.memory.isHarvesting = true;
         }
 

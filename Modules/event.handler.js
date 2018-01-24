@@ -21,13 +21,13 @@ var eventHandler = {
         var currentExtensions = room.find(FIND_STRUCTURES, { filter: (s) => {return s.structureType == 'extension'}}).length;
         if (currentExtensions < (controller.level - 2) * 5) {
             room.find(FIND_FLAGS).forEach(function(flag){
-                room.lookForAt(LOOK_CONSTRUCTION_SITES, flag.x,  flag.y).forEach(function(site){
-                    site.remove();
-                });
-                room.lookForAt(LOOK_STRUCTURES, flag.x,  flag.y).forEach(function(structure){
-                    structure.destroy();
-                });
-                room.createConstructionSite(flag.pos, STRUCTURE_EXTENSION);
+                // room.lookForAt(LOOK_CONSTRUCTION_SITES, flag.x,  flag.y).forEach(function(site){
+                //     site.remove();
+                // });
+                // room.lookForAt(LOOK_STRUCTURES, flag.x,  flag.y).forEach(function(structure){
+                //     structure.destroy();
+                // });
+                // room.createConstructionSite(flag.pos, STRUCTURE_EXTENSION);
             });
         }
     }
