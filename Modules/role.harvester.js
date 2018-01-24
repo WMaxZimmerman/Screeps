@@ -4,7 +4,7 @@ var roleHarvester = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
-        if (creep.memory.class == undefined) creep.memory.class = 'worker';
+        if (creep.memory.class == undefined) creep.memory.class = 'worker'; //This line can be remove when new spawn logic is in place.
         if (creep.memory.isHarvesting == undefined) creep.memory.isHarvesting = creep.carry.energy < creep.carryCapacity;
 
         if(creep.carry.energy < creep.carryCapacity && creep.memory.isHarvesting == true) {
