@@ -20,7 +20,7 @@ var roleRepairman = {
         if(creep.memory.working) {
             var closestStruct = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                filter: (cs) =>  {
-                   return ((cs.structureType == STRUCTURE_WALL || cs.structureType == STRUCTURE_RAMPART) && cs.hits < cs.hitsMax);
+                   return ((cs.structureType == STRUCTURE_WALL || cs.structureType == STRUCTURE_RAMPART) && cs.hits < 100000);
                 }, algorithm: 'astar', ignoreRoads: true, swampCost: 1
             });
 
