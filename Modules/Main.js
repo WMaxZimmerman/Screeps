@@ -118,9 +118,9 @@ module.exports.loop = function () {
             if(creep.memory.role == 'builder') {
                 if (creep.room.find(FIND_CONSTRUCTION_SITES).length == 0) {
                     roleRepairman.run(creep);
-                } else if (creep.room.find(FIND_STRUCTURES, filter: (cs) =>  {
+                } else if (creep.room.find(FIND_STRUCTURES, { filter: (cs) =>  {
                     return ((cs.structureType == STRUCTURE_WALL || cs.structureType == STRUCTURE_RAMPART) && cs.hits < cs.hitsMax);
-                }).length == 0) {
+                }}).length == 0) {
                     roleUpgrader.run(creep);
                 } else {
                     roleBuilder.run(creep);

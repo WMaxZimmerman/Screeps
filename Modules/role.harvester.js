@@ -7,7 +7,7 @@ var roleHarvester = {
         if (creep.memory.class == undefined) creep.memory.class = 'worker'; //This line can be remove when new spawn logic is in place.
         if (creep.memory.isHarvesting == undefined) creep.memory.isHarvesting = creep.carry.energy < creep.carryCapacity;
 
-        if(creep.carry.energy < creep.carryCapacity && creep.memory.isHarvesting == true) {
+        if(creep.carry[RESOURCE_ENERGY] < creep.carryCapacity && creep.memory.isHarvesting == true) {
             var source = creep.pos.findClosestByPath(FIND_SOURCES, { algorithm: 'astar', ignoreRoads: true,  swampCost: 1, plainCost: 1 });
             if (source == null) {
                 creep.pos.findClosestByPath(FIND_SOURCES, { algorithm: 'astar', ignoreCreeps: true, ignoreRoads: true,  swampCost: 1, plainCost: 1 });
@@ -16,7 +16,7 @@ var roleHarvester = {
             constructionManager.moveTowardTarget(creep, source, 'harvest');
         }
         else {
-            if (creep.carry.energy == creep.carryCapacity) creep.memory.isHarvesting = false;
+            if (creep.carry[RESOURCE_ENERGY] == creep.carryCapacity) creep.memory.isHarvesting = false;
 
             var target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                 filter: (structure) => {
