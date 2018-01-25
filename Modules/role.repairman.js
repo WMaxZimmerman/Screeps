@@ -8,11 +8,11 @@ var roleRepairman = {
         //creep.moveTo(40, 24);
         //return;
 
-        if(creep.memory.working && creep.carry.energy == 0) {
+        if(creep.memory.working && creep.carry[RESOURCE_ENERGY] == 0) {
             creep.memory.working = false;
             creep.say('🔄 harvest');
         }
-        if(!creep.memory.working && creep.carry.energy == creep.carryCapacity) {
+        if(!creep.memory.working && creep.carry[RESOURCE_ENERGY] == creep.carryCapacity) {
             creep.memory.working = true;
             creep.say('🚧 repair');
         }

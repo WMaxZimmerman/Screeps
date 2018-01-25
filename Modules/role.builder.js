@@ -20,11 +20,11 @@ var roleBuilder = {
         //creep.moveTo(40, 24);
         //return;
 
-        if(creep.memory.building && creep.carry.energy == 0) {
+        if(creep.memory.building && creep.carry[RESOURCE_ENERGY] == 0) {
             creep.memory.building = false;
             creep.say('🔄 harvest');
         }
-        if(!creep.memory.building && creep.carry.energy == creep.carryCapacity) {
+        if(!creep.memory.building && creep.carry[RESOURCE_ENERGY] == creep.carryCapacity) {
             creep.memory.building = true;
             creep.say('🚧 build');
         }

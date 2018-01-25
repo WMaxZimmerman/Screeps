@@ -6,11 +6,11 @@ var roleUpgrader = {
     run: function(creep) {
         if (creep.memory.class == undefined) creep.memory.class = 'worker';
 
-        if(creep.memory.upgrading && creep.carry.energy == 0) {
+        if(creep.memory.upgrading && creep.carry[RESOURCE_ENERGY] == 0) {
             creep.memory.upgrading = false;
             creep.say('🔄 harvest');
         }
-        if(!creep.memory.upgrading && creep.carry.energy == creep.carryCapacity) {
+        if(!creep.memory.upgrading && creep.carry[RESOURCE_ENERGY] == creep.carryCapacity) {
             creep.memory.upgrading = true;
             creep.say('⚡ upgrade');
         }
