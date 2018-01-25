@@ -43,7 +43,7 @@ module.exports.loop = function () {
         if(structure != null && structure != undefined && structure.structureType == 'tower') {
             var closestDamagedStructure = structure.pos.findClosestByRange(FIND_STRUCTURES, {
                 filter: (structure) => {
-                    return (structure.hits < 50000) && (structure.structureType == 'rampart');
+                    return (structure.hits < 100000) && (structure.structureType == 'rampart');
                 }
             });
             if(closestDamagedStructure) {
