@@ -69,7 +69,7 @@ var constructionManager = {
             } else {
                 return 1;
             }
-        }).filter(s => s.roomName == roomName);
+        }).filter(s => s.roomName == roomName && (Game.time - s.timeCreate) >= 50);
 
         if (prioritizedSites.length == 0) return null;
 
