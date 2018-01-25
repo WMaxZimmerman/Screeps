@@ -114,6 +114,8 @@ var constructionManager = {
             actionCode = creep.build(target);
         } else if (actionName == 'transfer') {
             actionCode = creep.transfer(target, RESOURCE_ENERGY);
+        } else if (actionName == 'repair') {
+            actionCode = creep.repair(target);
         }
 
         //creep.say(actionCode);

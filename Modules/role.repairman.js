@@ -18,25 +18,19 @@ var roleRepairman = {
         }
 
         if(creep.memory.working) {
-            var closestWall = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+            var closestStruct = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                filter: (cs) =>  {
-                    return ((cs.structureType == STRUCTURE_WALL && cs.hits < 100000) || (cs.structureType == 'rampart' && cs.hits < 100000)); //(cs.hitsMax / 600));
+                   return ((cs.structureType == STRUCTURE_WALL || cs.structureType == STRUCTURE_RAMPART) && cs.hits < cs.hitsMax);
                 }, algorithm: 'astar', ignoreRoads: true, swampCost: 1
             });
 
-            if (closestWall != undefined && closestWall != null) {
-                console.log('found not road');
-                if(creep.repair(closestWall) == ERR_NOT_IN_RANGE) {
-    	            creep.moveTo(closestWall, {visualizePathStyle: {stroke: '#ffffff'}});
-    	        }
+            if (closestStruct != undefined && closestStruct != null) {
+                constructionManager.moveTowardTarget(creep, closestStruct, 'repair');
             }
         } else {
-	        var closestSource = creep.pos.findClosestByPath(FIND_SOURCES, { algorithm: 'astar', ignoreRoads: true, swampCost: 1, plainCost: 1});
-	        //console.log('Closest Source: ' + closestSource);
-	        if (closestSource != null && creep.harvest(closestSource) == ERR_NOT_IN_RANGE) {
-	            creep.moveTo(closestSource, {visualizePathStyle: {stroke: '#ffaa00'}});
-	        }
-	    }
+            var closestSource = creep.pos.findClosestByPath(FIND_SOURCES, { algorithm: 'astar', ignoreRoads: true, swampCost: 1, plainCost: 1});
+            constructionManager.moveTowardTarget(creep, closestSource, 'harvest');
+        }
 
         constructionManager.checkRoadConstruction(creep);
     }
