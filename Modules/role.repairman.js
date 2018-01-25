@@ -28,7 +28,9 @@ var roleRepairman = {
                 constructionManager.moveTowardTarget(creep, closestStruct, 'repair');
             }
         } else {
-            var closestSource = creep.pos.findClosestByPath(FIND_SOURCES, { algorithm: 'astar', ignoreRoads: true, swampCost: 1, plainCost: 1});
+            var closestSource = creep.pos.findClosestByPath(FIND_SOURCES, { filter: (s) => {
+                return s.energy > 0;
+            }, algorithm: 'astar', ignoreRoads: true, swampCost: 1, plainCost: 1});
             constructionManager.moveTowardTarget(creep, closestSource, 'harvest');
         }
 

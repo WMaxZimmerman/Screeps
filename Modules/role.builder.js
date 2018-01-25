@@ -45,7 +45,9 @@ var roleBuilder = {
                 constructionManager.moveTowardTarget(creep, prioritySite, 'build');
             }
         } else {
-            var closestSource = creep.pos.findClosestByPath(FIND_SOURCES, { algorithm: 'astar', ignoreCreeps: true, ignoreRoads: true, swampCost: 1, plainCost: 1});
+            var closestSource = creep.pos.findClosestByPath(FIND_SOURCES, { filter: (s) => {
+                return s.energy > 0;
+            }, algorithm: 'astar', ignoreCreeps: true, ignoreRoads: true, swampCost: 1, plainCost: 1});
             constructionManager.moveTowardTarget(creep, closestSource, 'harvest');
         }
 

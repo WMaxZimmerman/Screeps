@@ -25,8 +25,10 @@ var roleUpgrader = {
             //     var exit = creep.pos.findClosestByPath(exitDir, { algorithm: 'astar', ignoreRoads: true, swampCost: 1, plainCost: 1, ignoreCreeps: true });
             //     creep.moveTo(exit, {visualizePathStyle: {stroke: '#ffaa00'}});
             //} else {
-                var source = creep.pos.findClosestByPath(FIND_SOURCES, { algorithm: 'astar', ignoreRoads: true, swampCost: 1, plainCost: 1 });
-                constructionManager.moveTowardTarget(creep, source, 'harvest');
+            var source = creep.pos.findClosestByPath(FIND_SOURCES, { filter: (s) => {
+                return s.energy > 0;
+            }, algorithm: 'astar', ignoreRoads: true, swampCost: 1, plainCost: 1 });
+            constructionManager.moveTowardTarget(creep, source, 'harvest');
             //}
         }
 
