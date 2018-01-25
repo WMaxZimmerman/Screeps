@@ -10,7 +10,7 @@ var roleHarvester = {
         if(creep.carry[RESOURCE_ENERGY] < creep.carryCapacity && creep.memory.isHarvesting == true) {
             var source = creep.pos.findClosestByPath(FIND_SOURCES, { filter: (s) => {
                 return s.energy > 0;
-            }, algorithm: 'astar', ignoreRoads: true,  swampCost: 1, plainCost: 1 });
+            }, algorithm: 'astar', ignoreCreeps: true, ignoreRoads: true, swampCost: 1, plainCost: 1});
             if (source == null) {
                 creep.pos.findClosestByPath(FIND_SOURCES, { algorithm: 'astar', ignoreCreeps: true, ignoreRoads: true,  swampCost: 1, plainCost: 1 });
                 console.log(JSON.stringify(source));
