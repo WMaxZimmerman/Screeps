@@ -116,7 +116,9 @@ module.exports.loop = function () {
                 roleUpgrader.run(creep);
             }
             if(creep.memory.role == 'builder') {
-                if (creep.room.find(FIND_CONSTRUCTION_SITES).length == 0) {
+                if (creep.room.find(FIND_MY_CREEPS, { filter: (c) => { return c.memory.role == 'harvester' }}).length == 0) {
+                    roleHarvester.run(creep);
+                } else if (creep.room.find(FIND_CONSTRUCTION_SITES).length == 0) {
                     roleRepairman.run(creep);
                 } else if (creep.room.find(FIND_STRUCTURES, { filter: (cs) =>  {
                     return ((cs.structureType == STRUCTURE_WALL || cs.structureType == STRUCTURE_RAMPART) && cs.hits < cs.hitsMax);
