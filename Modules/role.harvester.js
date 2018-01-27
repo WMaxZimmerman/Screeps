@@ -17,10 +17,7 @@ var roleHarvester = {
                     return s.energy > 0;
                 }, algorithm: 'astar', ignoreCreeps: true, ignoreRoads: true, swampCost: 1, plainCost: 1});
             }
-            if (source == null) {
-                creep.pos.findClosestByPath(FIND_SOURCES, { algorithm: 'astar', ignoreCreeps: true, ignoreRoads: true,  swampCost: 1, plainCost: 1 });
-                console.log(JSON.stringify(source));
-            }
+
             constructionManager.moveTowardTarget(creep, source, 'harvest');
         }
         else {

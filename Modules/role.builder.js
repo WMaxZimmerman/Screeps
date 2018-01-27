@@ -54,7 +54,7 @@ var roleBuilder = {
                     return s.energy > 0;
                 }, algorithm: 'astar', ignoreCreeps: true, ignoreRoads: true, swampCost: 1, plainCost: 1});
             }
-            constructionManager.moveTowardTarget(creep, closestSource, 'harvest');
+            constructionManager.moveTowardTarget(creep, source, 'harvest');
         }
 
         constructionManager.checkRoadConstruction(creep);
