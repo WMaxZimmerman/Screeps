@@ -45,9 +45,15 @@ var roleBuilder = {
                 constructionManager.moveTowardTarget(creep, prioritySite, 'build');
             }
         } else {
-            var closestSource = creep.pos.findClosestByPath(FIND_SOURCES, { filter: (s) => {
+            var source = creep.pos.findClosestByPath(FIND_SOURCES, { filter: (s) => {
                 return s.energy > 0;
-            }, algorithm: 'astar', ignoreCreeps: true, ignoreRoads: true, swampCost: 1, plainCost: 1});
+            }, algorithm: 'astar', ignoreRoads: true, swampCost: 1, plainCost: 1});
+
+            if (source == null) {
+                source = creep.pos.findClosestByPath(FIND_SOURCES, { filter: (s) => {
+                    return s.energy > 0;
+                }, algorithm: 'astar', ignoreCreeps: true, ignoreRoads: true, swampCost: 1, plainCost: 1});
+            }
             constructionManager.moveTowardTarget(creep, closestSource, 'harvest');
         }
 
