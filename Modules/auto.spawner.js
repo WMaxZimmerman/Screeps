@@ -21,7 +21,7 @@ var autoSpawner = {
         let totalCreepCount = harvesters.length + builders.length + upgraders.length + fighters.length;
         let roleCap = 2;
         let roleCount = 4;
-        let workerLvl = creepLvl;
+        let workerLvl = creepLvl > 5 ? 5 : 0;
         let workerCost = (200 * workerLvl);
         var workerBody = [WORK,CARRY,MOVE];
         if (workerLvl >= 2) workerBody = [WORK,CARRY,MOVE,WORK,CARRY,MOVE];
