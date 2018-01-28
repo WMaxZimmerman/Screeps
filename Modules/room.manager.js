@@ -1,3 +1,9 @@
+var roleHarvester = require('role.harvester');
+var roleUpgrader = require('role.upgrader');
+var roleBuilder = require('role.builder');
+var roleRepairman = require('role.repairman');
+var roleFighter = require('role.fighter');
+
 var roomManager = {
 
     manageRoom: function(room) {
@@ -9,7 +15,7 @@ var roomManager = {
             };
         }
 
-        let workers = room.find(FIND_MY_CREEPS, {filter: { (c) => { c.memory.class == 'worker' }}});
+        let workers = room.find(FIND_MY_CREEPS, {filter: (c) => { c.memory.class == 'worker' }});
 
         //Check worker level
         if (workers.length == 0) room.memory.properties.workerLvl = 1;
@@ -19,7 +25,63 @@ var roomManager = {
             if (room.memory.properties.workerLvl > 5) room.memory.properties.workerLvl = 5;
         }
 
-        oldCreepManager();
+        for(var name in Game.creeps) {
+            var creep = Game.creeps[name];
+            if(creep.memory.role == 'harvester') {
+                var closestStruct = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                    filter: (structure) => {
+                        return (structure.structureType == STRUCTURE_EXTENSION ||
+                            structure.structureType == STRUCTURE_SPAWN ||
+                            structure.structureType == STRUCTURE_TOWER||
+                            structure.structureType == STRUCTURE_CONTAINER) &&
+                            (structure.energy < structure.energyCapacity);
+                    }, algorithm: 'astar', ignoreRoads: true, swampCost: 1, plainCost: 1
+                });
+                if (closestStruct == null) {
+                    roleUpgrader.run(creep);
+                } else {
+                    roleHarvester.run(creep);
+                }
+            }
+            if(creep.memory.role == 'upgrader') {
+                roleUpgrader.run(creep);
+            }
+            if(creep.memory.role == 'builder') {
+                if (creep.room.find(FIND_MY_CREEPS, { filter: (c) => { return c.memory.role == 'harvester' }}).length == 0) {
+                    roleHarvester.run(creep);
+                } else if (creep.room.find(FIND_CONSTRUCTION_SITES).length == 0) {
+                //    roleRepairman.run(creep);
+                //} else if (creep.room.find(FIND_STRUCTURES, { filter: (cs) =>  {
+                //    return ((cs.structureType == STRUCTURE_WALL || cs.structureType == STRUCTURE_RAMPART) && cs.hits < cs.hitsMax);
+                //}}).length == 0) {
+                    roleUpgrader.run(creep);
+                } else {
+                    roleBuilder.run(creep);
+                }
+            }
+            if(creep.memory.role == 'repairman') {
+                if (creep.room.energyAvailable == creep.room.energyCapacityAvailable) {
+                    if (creep.room.find(FIND_CONSTRUCTION_SITES).length > 0) {
+                        roleBuilder.run(creep);
+                    } else {
+                        roleUpgrader.run(creep);
+                    }
+                } else {
+                    roleHarvester.run(creep);
+                }
+            }
+            if(creep.memory.role == 'guard') {
+                console.log('found guard');
+                roleFighter.guard(creep, 'Flag3', 'flag');
+            }
+            if(creep.memory.role == 'claimer') {
+                roleFighter.claim(creep);
+            }
+            if(creep.memory.role == 'invader') {
+                roleFighter.guard(creep, 'Hole', 'flag');
+                //roleFighter.invade(creep);
+            }
+        }
     },
 
     manageWorkers: function(room) {
@@ -55,22 +117,18 @@ var roomManager = {
         var upgraders = _.filter(workers, (creep) => creep.memory.role == 'upgrader');
 
         //harvester values
-        var harvesterLimit = room.energyCapacityAvailable / 100;
-        var neededHarvesters = ((room.energyCapacityAvailable - room.energyAvailable) / room.energyCapacityAvailable) * harvesterLimit;
-        var currentHarvesters = harvesters.length;
-        var harvesterDelta = neededHarvesters - currentHarvesters;
+        //var harvesterLimit = room.energyCapacityAvailable / 100;
+        //var neededHarvesters = ((room.energyCapacityAvailable - room.energyAvailable) / room.energyCapacityAvailable) * harvesterLimit;
+        //var currentHarvesters = harvesters.length;
+        //var harvesterDelta = neededHarvesters - currentHarvesters;
 
         //builder values
-        var constructionSites = room.find(FIND_CONSTRUCTION_SITES).length;
-        var builderLimit = (constructionSites / 2);
-        if (builderLimit > 10) builderLimit = 10;
-        var neededBuilders = (constructionSites / 100) * 1;
-        var currentBuilders = builders.length;
-        var builderDelta = neededBuilders - currentBuilders;
-
-        if (harvesterDelta > 0) {
-
-        }
+        //var constructionSites = room.find(FIND_CONSTRUCTION_SITES).length;
+        //var builderLimit = (constructionSites / 2);
+        //if (builderLimit > 10) builderLimit = 10;
+        //var neededBuilders = (constructionSites / 100) * 1;
+        //var currentBuilders = builders.length;
+        //var builderDelta = neededBuilders - currentBuilders;
     },
 
     oldCreepManager: function() {
@@ -152,7 +210,7 @@ var roomManager = {
 
         let workerBody = getWorkerBody(workerLvl);
         let workerName = 'Worker_' + workerLvl + '_' + Game.time;
-        console.log('Spawning new Worker: ' + newName + ' ('+ role + ')');
+        console.log('Spawning new Worker: ' + workerName + ' ('+ role + ')');
         spawn.spawnCreep(workerBody, workerName, {memory: {class: 'worker', role: role}});
     }
 };

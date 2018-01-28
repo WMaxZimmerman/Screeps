@@ -38,6 +38,7 @@ var constructionManager = {
     },
 
     setPrioritySite: function() {
+        if (Memory.sites == undefined) return;
         var prioritizedSites = Memory.sites.sort(function(a,b) {
             if (a.priorityCount > b.priorityCount) {
                 return -1;
