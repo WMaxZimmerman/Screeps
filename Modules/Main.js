@@ -1,3 +1,4 @@
+var roomManager = require('room.manager');
 var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
@@ -84,72 +85,13 @@ module.exports.loop = function () {
         var room = Game.rooms[roomName];
         var controller = room.controller;
 
+        roomManager.manageRoom(room);
+
         if (controller.owner.username == 'SmileyFace') {
             var spawns = room.find(FIND_MY_SPAWNS);
             room.find(FIND_MY_SPAWNS).map( (spawn) => {
-                var lvl = Math.trunc(room.energyCapacityAvailable / 200);
-                let creepCount = room.find(FIND_MY_CREEPS).length;
-                if (creepCount <= 2) lvl = 1;
-                autoSpawner.run(spawn, lvl);
+                autoSpawner.run(spawn);
             });
-        }
-
-        for(var name in Game.creeps) {
-            var creep = Game.creeps[name];
-            if(creep.memory.role == 'harvester') {
-                var closestStruct = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-                    filter: (structure) => {
-                        return (structure.structureType == STRUCTURE_EXTENSION ||
-                            structure.structureType == STRUCTURE_SPAWN ||
-                            structure.structureType == STRUCTURE_TOWER||
-                            structure.structureType == STRUCTURE_CONTAINER) &&
-                            (structure.energy < structure.energyCapacity);
-                    }, algorithm: 'astar', ignoreRoads: true, swampCost: 1, plainCost: 1
-                });
-                if (closestStruct == null) {
-                    roleUpgrader.run(creep);
-                } else {
-                    roleHarvester.run(creep);
-                }
-            }
-            if(creep.memory.role == 'upgrader') {
-                roleUpgrader.run(creep);
-            }
-            if(creep.memory.role == 'builder') {
-                if (creep.room.find(FIND_MY_CREEPS, { filter: (c) => { return c.memory.role == 'harvester' }}).length == 0) {
-                    roleHarvester.run(creep);
-                } else if (creep.room.find(FIND_CONSTRUCTION_SITES).length == 0) {
-                //    roleRepairman.run(creep);
-                //} else if (creep.room.find(FIND_STRUCTURES, { filter: (cs) =>  {
-                //    return ((cs.structureType == STRUCTURE_WALL || cs.structureType == STRUCTURE_RAMPART) && cs.hits < cs.hitsMax);
-                //}}).length == 0) {
-                    roleUpgrader.run(creep);
-                } else {
-                    roleBuilder.run(creep);
-                }
-            }
-            if(creep.memory.role == 'repairman') {
-                if (creep.room.energyAvailable == creep.room.energyCapacityAvailable) {
-                    if (creep.room.find(FIND_CONSTRUCTION_SITES).length > 0) {
-                        roleBuilder.run(creep);
-                    } else {
-                        roleUpgrader.run(creep);
-                    }
-                } else {
-                    roleHarvester.run(creep);
-                }
-            }
-            if(creep.memory.role == 'guard') {
-                console.log('found guard');
-                roleFighter.guard(creep, 'Flag3', 'flag');
-            }
-            if(creep.memory.role == 'claimer') {
-                roleFighter.claim(creep);
-            }
-            if(creep.memory.role == 'invader') {
-                roleFighter.guard(creep, 'Hole', 'flag');
-                //roleFighter.invade(creep);
-            }
         }
     }
 }

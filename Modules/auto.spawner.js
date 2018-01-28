@@ -1,7 +1,9 @@
+var roomManager = require('room.manager');
+
 var autoSpawner = {
 
     /** @param {Creep} creep **/
-    run: function(spawn, creepLvl) {
+    run: function(spawn) {
         if(spawn.spawning) {
             var spawningCreep = Game.creeps[spawn.spawning.name];
             spawn.room.visual.text(
@@ -21,7 +23,7 @@ var autoSpawner = {
         let totalCreepCount = harvesters.length + builders.length + upgraders.length + fighters.length;
         let roleCap = 2;
         let roleCount = 4;
-        let workerLvl = creepLvl > 5 ? 5 : 0;
+        let workerLvl = spawn.room.memory.properties.workerLvl;
         let workerCost = (200 * workerLvl);
         var workerBody = [WORK,CARRY,MOVE];
         if (workerLvl >= 2) workerBody = [WORK,CARRY,MOVE,WORK,CARRY,MOVE];
@@ -30,17 +32,11 @@ var autoSpawner = {
         if (workerLvl >= 5) workerBody = [WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE];
 
         if(harvesters.length < roleCap && spawn.room.energyAvailable >= workerCost) {
-            var newName = 'Harvester_' + workerLvl + '_' + Game.time;
-            console.log('Spawning new harvester: ' + newName);
-            spawn.spawnCreep(workerBody, newName, {memory: {role: 'harvester'}});
+            roomManager.spawnWorker(spawn, "harvester", workerLvl);
         } else if(upgraders.length < roleCap && spawn.room.energyAvailable >= workerCost) {
-            var newName = 'Upgrader_' + workerLvl + '_' + Game.time;
-            console.log('Spawning new upgrader: ' + newName);
-            spawn.spawnCreep(workerBody, newName, {memory: {role: 'upgrader'}});
+            roomManager.spawnWorker(spawn, "upgrader", workerLvl);
         } else if(builders.length < roleCap && spawn.room.energyAvailable >= workerCost) {
-            var newName = 'Builder_' + workerLvl + '_' + Game.time;
-            console.log('Spawning new builder: ' + newName);
-            spawn.spawnCreep(workerBody, newName, {memory: {role: 'builder'}});
+            roomManager.spawnWorker(spawn, "builder", workerLvl);
         }
         else if(repairmen.length < roleCap && spawn.room.energyAvailable >= workerCost) {
             //var newName = 'Repairman' + Game.time;
