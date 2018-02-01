@@ -15,7 +15,7 @@ var roomManager = {
             };
         }
 
-        let workers = room.find(FIND_MY_CREEPS, {filter: (c) => { c.memory.class == 'worker' }});
+        let workers = room.find(FIND_MY_CREEPS, {filter: (c) => { return c.memory.class == 'worker' }});
 
         //Check worker level
         if (workers.length == 0) room.memory.properties.workerLvl = 1;
