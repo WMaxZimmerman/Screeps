@@ -95,6 +95,7 @@ module.exports.loop = function () {
 		});
             }
 	} catch(err) {
+	    console.log(Game.rooms);
 	    console.log('and error occurred in main: ' + err.message);
 	}
     }
