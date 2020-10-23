@@ -88,14 +88,16 @@ module.exports.loop = function () {
 
             roomManager.manageRoom(room);
 
-            if (controller.owner.username == 'SmileyFace') {
-		var spawns = room.find(FIND_MY_SPAWNS);
-		room.find(FIND_MY_SPAWNS).map( (spawn) => {
-                    autoSpawner.run(spawn);
-		});
-            }
+	    if (!controller.owner !== undefined)
+	    {
+		if (controller.owner.username == 'SmileyFace') {
+		    var spawns = room.find(FIND_MY_SPAWNS);
+		    room.find(FIND_MY_SPAWNS).map( (spawn) => {
+			autoSpawner.run(spawn);
+		    });
+		}
+	    }    
 	} catch(err) {
-	    console.log(Game.rooms);
 	    console.log('and error occurred in main: ' + err.message);
 	}
     }
