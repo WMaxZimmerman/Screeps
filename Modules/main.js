@@ -82,16 +82,20 @@ module.exports.loop = function () {
     constructionManager.cleanUselessRoads();
 
     for(var roomName in Game.rooms) {
-        var room = Game.rooms[roomName];
-        var controller = room.controller;
+	try {
+	    var room = Game.rooms[roomName];
+            var controller = room.controller;
 
-        roomManager.manageRoom(room);
+            roomManager.manageRoom(room);
 
-        if (controller.owner.username == 'SmileyFace') {
-            var spawns = room.find(FIND_MY_SPAWNS);
-            room.find(FIND_MY_SPAWNS).map( (spawn) => {
-                autoSpawner.run(spawn);
-            });
-        }
+            if (controller.owner.username == 'SmileyFace') {
+		var spawns = room.find(FIND_MY_SPAWNS);
+		room.find(FIND_MY_SPAWNS).map( (spawn) => {
+                    autoSpawner.run(spawn);
+		});
+            }
+	} catch(err) {
+	    console.log('and error occurred in main: ' + err.message);
+	}
     }
 }
