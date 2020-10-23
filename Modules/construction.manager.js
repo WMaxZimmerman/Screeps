@@ -38,26 +38,32 @@ var constructionManager = {
     },
 
     setPrioritySite: function() {
-        if (Memory.sites == undefined) return;
-        var prioritizedSites = Memory.sites.sort(function(a,b) {
-            if (a.priorityCount > b.priorityCount) {
-                return -1;
+	try
+	{
+	    if (Memory.sites == undefined) return;
+            var prioritizedSites = Memory.sites.sort(function(a,b) {
+		if (a.priorityCount > b.priorityCount) {
+                    return -1;
+		} else {
+                    return 1;
+		}
+            });
+
+            if (prioritizedSites.length == 0) return;
+
+	    var topSite = prioritizedSites[0].pos;
+            var roomName = prioritizedSites[0].roomName;
+            var topTargets = Game.rooms[roomName].lookForAt(LOOK_CONSTRUCTION_SITES, topSite.x,  topSite.y);
+
+            if (topTargets.length > 0) {
+		Memory.prioritySite = topTargets[0];
             } else {
-                return 1;
+		Memory.prioritySite = null;
             }
-        });
-
-        if (prioritizedSites.length == 0) return;
-
-	var topSite = prioritizedSites[0].pos;
-        var roomName = prioritizedSites[0].roomName;
-        var topTargets = Game.rooms[roomName].lookForAt(LOOK_CONSTRUCTION_SITES, topSite.x,  topSite.y);
-
-        if (topTargets.length > 0) {
-	    Memory.prioritySite = topTargets[0];
-        } else {
-	    Memory.prioritySite = null;
-        }
+	} catch(err)
+	{
+	    console.log('An Error occured in setPrioritySite: ' + err.message);
+	}
     },
 
     getPrioritySite: function(roomName) {
