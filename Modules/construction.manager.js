@@ -49,18 +49,17 @@ var constructionManager = {
 
         if (prioritizedSites.length == 0) return;
 
-        var topSite = prioritizedSites[0].pos;
-        var roomName = prioritizedSites[0].roomName;
-        //console.log('top: ' + JSON.stringify(topSite));
-        var topTargets = Game.rooms[roomName].lookForAt(LOOK_CONSTRUCTION_SITES, topSite.x,  topSite.y);
-        //console.log('sites: ' + topTargets.length);
-        //console.log('topSite: ' + JSON.stringify(topTargets[0]));
+	try {
+	    var topSite = prioritizedSites[0].pos;
+            var roomName = prioritizedSites[0].roomName;
+            var topTargets = Game.rooms[roomName].lookForAt(LOOK_CONSTRUCTION_SITES, topSite.x,  topSite.y);
 
-        if (topTargets.length > 0) {
-            Memory.prioritySite = topTargets[0];
-        } else {
-            Memory.prioritySite = null;
-        }
+            if (topTargets.length > 0) {
+		Memory.prioritySite = topTargets[0];
+            } else {
+		Memory.prioritySite = null;
+            }
+	}
     },
 
     getPrioritySite: function(roomName) {
