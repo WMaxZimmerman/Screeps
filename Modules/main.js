@@ -88,7 +88,7 @@ module.exports.loop = function () {
 
             roomManager.manageRoom(room);
 
-	    if (!controller.owner !== undefined)
+	    if (controller.owner !== undefined)
 	    {
 		if (controller.owner.username == 'SmileyFace') {
 		    var spawns = room.find(FIND_MY_SPAWNS);
