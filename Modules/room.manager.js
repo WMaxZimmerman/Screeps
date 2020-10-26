@@ -79,7 +79,7 @@ var roomManager = {
             }
             if(creep.memory.role == 'invader') {
                 roleFighter.guard(creep, 'Hole', 'flag');
-                //roleFighter.invade(creep);
+                roleFighter.invade(creep);
             }
         }
     },
