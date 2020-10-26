@@ -44,9 +44,9 @@ var autoSpawner = {
             //spawn.spawnCreep([WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE], newName, {memory: {role: 'repairman'}});
         }
         else if(fighters.length < roleCap / 2 && spawn.room.energyAvailable >= 250) { //&& harvesters.length > 3 && upgraders.length > 2 && builders.length > 2 && Game.gcl >= 3) {
-            //var newName = 'Fighter' + Game.time;
-            //console.log('Spawning new fighter: ' + newName);
-            //spawn.spawnCreep([MOVE,MOVE,RANGED_ATTACK], newName,{memory: {class: 'fighter', role: 'invader'}});
+            var newName = 'Fighter' + Game.time;
+            console.log('Spawning new fighter: ' + newName);
+            spawn.spawnCreep([MOVE,MOVE,RANGED_ATTACK], newName,{memory: {class: 'fighter', role: 'invader'}});
         }
         // else if (spawn.room.energyAvailable >= workerCost && harvesters.length < roleCap) {
         //     var newName = 'Harvester' + Game.time;
